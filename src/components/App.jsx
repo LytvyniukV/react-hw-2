@@ -1,35 +1,57 @@
 import { Description } from './Description/Description';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Options } from './Options/Options';
 import { Feedback } from './Feedback/Feedback';
+import { Notification } from './Notification/Notification';
 function App() {
-  const [feedbacks, setFeedback] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
+  const [feedbacks, setFeedback] = useState(() => {
+    const saveFeedback = localStorage.getItem('feedback');
+    if (saveFeedback) {
+      return JSON.parse(saveFeedback);
+    } else {
+      return {
+        good: 0,
+        neutral: 0,
+        bad: 0,
+      };
+    }
   });
-  const [totalFeedback, setTotalFeedback] = useState(0);
-  const [positivePercent, setPositivePercent] = useState(0);
   const updateFeedback = feedback => {
     setFeedback({
       ...feedbacks,
       [feedback]: feedbacks[feedback] + 1,
     });
-    setTotalFeedback(feedbacks.good + feedbacks.neutral + feedbacks.bad);
-    setPositivePercent(
-      Math.round(((feedbacks.good + feedbacks.neutral) / totalFeedback) * 100)
-    );
   };
 
+  useEffect(() => {
+    localStorage.setItem('feedback', JSON.stringify(feedbacks));
+  }, [feedbacks]);
+  const totalFeedback = feedbacks.good + feedbacks.neutral + feedbacks.bad;
+  const positivePercent = Math.round(
+    ((feedbacks.good + feedbacks.neutral) / totalFeedback) * 100
+  );
+
+  const clearFeedback = () => {
+    setFeedback({ good: 0, neutral: 0, bad: 0 });
+  };
   return (
     <>
       <Description />
-      <Options updateFeedback={updateFeedback} totalFeedback={totalFeedback} />
-      <Feedback
-        positivePercent={positivePercent}
+      <Options
+        updateFeedback={updateFeedback}
         totalFeedback={totalFeedback}
-        feedbacks={feedbacks}
+        clearFeedback={clearFeedback}
       />
+
+      {totalFeedback > 0 ? (
+        <Feedback
+          positivePercent={positivePercent}
+          totalFeedback={totalFeedback}
+          feedbacks={feedbacks}
+        />
+      ) : (
+        <Notification />
+      )}
     </>
   );
 }
