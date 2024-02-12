@@ -5,8 +5,8 @@
   margin-bottom: 20px;
 }
 .button {
-  width: 30px;
-  height: 20px;
+  width: 80px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,6 +15,7 @@
 .good {
   composes: button;
   background-color: green;
+  color: white;
 }
 .neutral {
   composes: button;
@@ -23,6 +24,7 @@
 .bad {
   composes: button;
   background-color: red;
+  color: white;
 }
 .reset {
   composes: button;
