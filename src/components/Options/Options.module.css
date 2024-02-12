@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  gap: 10px;
+  margin-left: 15px;
+  margin-bottom: 20px;
+}
+.button {
+  width: 30px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: capitalize;
+}
+.good {
+  composes: button;
+  background-color: green;
+}
+.neutral {
+  composes: button;
+  background-color: yellow;
+}
+.bad {
+  composes: button;
+  background-color: red;
+}
+.reset {
+  composes: button;
+  background-color: rgb(175, 242, 220);
+}
